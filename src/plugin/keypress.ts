@@ -76,6 +76,10 @@ export default function (mind: MindElixirInstance) {
         mind.insertSibling('after')
       }
     },
+    65: () => {
+      // a，回答xx
+      mind.answerChild()
+    },
     9: () => {
       // tab
       mind.addChild()

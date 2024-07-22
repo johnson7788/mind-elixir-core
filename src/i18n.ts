@@ -1,4 +1,5 @@
 type LangPack = {
+  answerChild: string
   addChild: string
   addParent: string
   addSibling: string
@@ -12,6 +13,7 @@ type LangPack = {
   summary: string
 }
 const cn = {
+  answerChild: '回答并插入子节点',
   addChild: '插入子节点',
   addParent: '插入父节点',
   addSibling: '插入同级节点',
@@ -28,6 +30,7 @@ const i18n: Record<string, LangPack> = {
   cn,
   zh_CN: cn,
   zh_TW: {
+    answerChild: '回答并插入子節點',
     addChild: '插入子節點',
     addParent: '插入父節點',
     addSibling: '插入同級節點',
@@ -41,6 +44,7 @@ const i18n: Record<string, LangPack> = {
     summary: '摘要',
   },
   en: {
+    answerChild: 'Answer and Add child',
     addChild: 'Add child',
     addParent: 'Add parent',
     addSibling: 'Add sibling',
@@ -54,6 +58,7 @@ const i18n: Record<string, LangPack> = {
     summary: 'Summary',
   },
   ru: {
+    answerChild: 'Добавить дочерний элемент',
     addChild: 'Добавить дочерний элемент',
     addParent: 'Добавить родительский элемент',
     addSibling: 'Добавить на этом уровне',
@@ -67,6 +72,7 @@ const i18n: Record<string, LangPack> = {
     summary: 'Описание',
   },
   ja: {
+    answerChild: '子ノードを追加する',
     addChild: '子ノードを追加する',
     addParent: '親ノードを追加します',
     addSibling: '兄弟ノードを追加する',
@@ -80,6 +86,7 @@ const i18n: Record<string, LangPack> = {
     summary: '概要',
   },
   pt: {
+    answerChild: 'Adicionar item filho',
     addChild: 'Adicionar item filho',
     addParent: 'Adicionar item pai',
     addSibling: 'Adicionar item irmao',
@@ -93,6 +100,7 @@ const i18n: Record<string, LangPack> = {
     summary: 'Resumo',
   },
   it: {
+    answerChild: 'Aggiungi figlio',
     addChild: 'Aggiungi figlio',
     addParent: 'Aggiungi genitore',
     addSibling: 'Aggiungi fratello',
@@ -106,6 +114,7 @@ const i18n: Record<string, LangPack> = {
     summary: 'Unisci nodi',
   },
   es: {
+    answerChild: 'Agregar hijo',
     addChild: 'Agregar hijo',
     addParent: 'Agregar padre',
     addSibling: 'Agregar hermano',

@@ -33,6 +33,10 @@ export type Theme = {
   }>
 }
 
+export type apiInterface  = {
+  answerAPI?: string 
+}
+
 /**
  * The MindElixir instance
  *
@@ -73,6 +77,8 @@ export interface MindElixirInstance extends MindElixirMethods {
   mainBranchStyle: number
   subBranchStyle: number
   mobileMenu: boolean
+  nodeMenu: boolean
+  apiInterface: apiInterface
   generateMainBranch: (params: MainLineParams) => PathString
   generateSubBranch: (params: SubLineParams) => PathString
 
@@ -130,6 +136,7 @@ export type Options = {
   mobileMenu?: boolean
   theme?: Theme
   nodeMenu?: boolean
+  apiInterface?: any
 }
 
 export type Uid = string

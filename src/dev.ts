@@ -53,9 +53,13 @@ const options: Options = {
     async addChild(el, obj) {
       console.log('addChild', el, obj)
       // await sleep()
+      // 如果返回时false,那么就不运行原来的addChild函数了，直接使用这个代替，否则，继续运行原来的addChild函数
       return true
     },
   },
+  apiInterface: {
+    answerAPI: "http://localhost:5556/mind/answer",
+  }
 }
 
 const mind = new MindElixir(options)
@@ -77,6 +81,10 @@ console.log('test E function', E('bd4313fbac40284b'))
 
 mind.bus.addListener('operation', (operation: Operation) => {
   console.log(operation)
+  // if ( operation.name === 'addChild' ) {
+  //   //修改topic
+  //   operation.obj.topic = 'Hello world'
+  // }
   // return {
   //   name: action name,
   //   obj: target object
@@ -91,6 +99,10 @@ mind.bus.addListener('operation', (operation: Operation) => {
 mind.bus.addListener('selectNode', node => {
   console.log(node)
 })
+mind.bus.addListener('unselectNode', node => {
+  console.log(node)
+})
+
 mind.bus.addListener('expandNode', node => {
   console.log('expandNode: ', node)
 })

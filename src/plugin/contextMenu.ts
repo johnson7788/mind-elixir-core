@@ -20,6 +20,7 @@ export default function (mind: MindElixirInstance, option: any) {
   }
   const locale = i18n[mind.locale] ? mind.locale : 'en'
   const lang = i18n[locale]
+  const answer_child = createLi('cm-answer_child', lang.answerChild, 'a')
   const add_child = createLi('cm-add_child', lang.addChild, 'tab')
   const add_parent = createLi('cm-add_parent', lang.addParent, '')
   const add_sibling = createLi('cm-add_sibling', lang.addSibling, 'enter')
@@ -33,6 +34,7 @@ export default function (mind: MindElixirInstance, option: any) {
 
   const menuUl = document.createElement('ul')
   menuUl.className = 'menu-list'
+  menuUl.appendChild(answer_child)
   menuUl.appendChild(add_child)
   menuUl.appendChild(add_parent)
   menuUl.appendChild(add_sibling)
@@ -128,6 +130,11 @@ export default function (mind: MindElixirInstance, option: any) {
 
   menuContainer.onclick = e => {
     if (e.target === menuContainer) menuContainer.hidden = true
+  }
+
+  answer_child.onclick = () => {
+    mind.answerChild()
+    menuContainer.hidden = true
   }
 
   add_child.onclick = () => {

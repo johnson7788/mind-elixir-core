@@ -37,6 +37,8 @@ function MindElixir(
     overflowHidden,
     mobileMenu,
     theme,
+    nodeMenu,
+    apiInterface
   }: Options
 ): void {
   console.log('ME_version ' + MindElixir.version, this)
@@ -52,6 +54,9 @@ function MindElixir(
   ele.className += ' mind-elixir'
   ele.innerHTML = ''
   ele.style.setProperty('--gap', GAP + 'px')
+  //添加其它属性
+  this.nodeMenu = nodeMenu || false
+  this.apiInterface = apiInterface
   this.mindElixirBox = ele as HTMLElement
   this.before = before || {}
   this.locale = locale || 'en'

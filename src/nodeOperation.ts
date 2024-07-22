@@ -1,4 +1,4 @@
-import { fillParent, refreshIds, unionTopics } from './utils/index'
+import { fillParent, refreshIds, unionTopics,generateUUID } from './utils/index'
 import { findEle, createExpander, shapeTpc } from './utils/dom'
 import { deepClone } from './utils/index'
 import type { Topic } from './types/dom'
@@ -120,6 +120,60 @@ export const insertParent = function (this: MindElixirInstance, el?: Topic, node
     name: 'insertParent',
     obj: newNodeObj,
   })
+}
+
+export const answerChild = async function (this: MindElixirInstance, el?: Topic, node?: NodeObj) {
+  console.time('answerChild')
+  const nodeEle = el || this.currentNode
+  if (!nodeEle) return
+  if (this.apiInterface?.answerAPI) {
+    //获取模型返回结果,this.apiInterface.answerAPI 是1个api 的url地址,使用fetch请求获取数据, Post 请求, 请求的参数是nodeEle.nodeObj
+    try {
+      const response = await fetch(this.apiInterface.answerAPI, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          node_id: nodeEle.nodeObj.id,
+          nodes: this.getData()
+        }),
+      })
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      const data = await response.json()
+      // 根据获取的数据进行相应的处理
+      console.log('API response:', data)
+      if (data.code === 0) {
+        const content = data.data
+        const id = generateUUID()
+        node =  {
+          topic: content,
+          id,
+        }
+      } else {
+        alert(`Failed to fetch data from the API, ${data.msg}`)
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error)
+      alert(`Failed to fetch data from the API, ${this.apiInterface.answerAPI}`)
+    }
+  } else {
+    alert('options里面的apiInterface中的answerAPI is not defined')
+  }
+  const res = addChildFunc(this, nodeEle, node)
+  if (!res) return
+  const { newTop, newNodeObj } = res
+  this.bus.fire('operation', {
+    name: 'addChild',
+    obj: newNodeObj,
+  })
+  console.timeEnd('answerChild')
+  if (!node) {
+    this.editTopic(newTop.firstChild)
+  }
+  this.selectNode(newTop.firstChild, true)
 }
 
 export const addChild = function (this: MindElixirInstance, el?: Topic, node?: NodeObj) {
