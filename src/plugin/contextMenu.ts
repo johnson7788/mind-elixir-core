@@ -139,7 +139,7 @@ export default function (mind: MindElixirInstance, option: any) {
     menuContainer.hidden = true
   }
 
-  answer_child.onclick = () => {
+  upload.onclick = () => {
     mind.upload()
     menuContainer.hidden = true
   }
