@@ -34,7 +34,9 @@ export type Theme = {
 }
 
 export type apiInterface  = {
+  singleNode?: boolean
   answerAPI?: string 
+  uploadAPI?: string 
 }
 
 /**

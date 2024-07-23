@@ -24,7 +24,7 @@ const options: Options = {
   newTopicName: '子节点',
   direction: MindElixir.SIDE,
   // direction: MindElixir.RIGHT,
-  locale: 'en',
+  locale: 'cn',
   draggable: true,
   editable: true,
   contextMenu: true,
@@ -58,7 +58,9 @@ const options: Options = {
     },
   },
   apiInterface: {
+    singleNode: true, //生成单个节点
     answerAPI: "http://localhost:5556/mind/answer",
+    uploadAPI: "http://localhost:5556/mind/upload_file",
   }
 }
 
@@ -98,10 +100,30 @@ mind.bus.addListener('operation', (operation: Operation) => {
 })
 mind.bus.addListener('selectNode', node => {
   console.log(node)
+  InsertNodeImage("http://127.0.0.1:5556/image/dog.jpg", node)
 })
-mind.bus.addListener('unselectNode', node => {
-  console.log(node)
-})
+
+function InsertNodeImage(imageUrl: string, node:any) {
+  const tpc = mind.findEle(node.id)
+  // 获取当前选中的节点
+  const selectNode = node
+  
+  if (!selectNode) {
+      console.error("No node selected.");
+      return;
+  }
+
+  // 插入图片到当前节点中
+  const image = {
+      url: imageUrl,
+      height: 90,
+      width: 90
+  };
+  selectNode.image = image;
+
+  // 更新节点的属性
+  mind.reshapeNode(tpc, selectNode);
+}
 
 mind.bus.addListener('expandNode', node => {
   console.log('expandNode: ', node)

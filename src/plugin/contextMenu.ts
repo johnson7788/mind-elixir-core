@@ -30,6 +30,7 @@ export default function (mind: MindElixirInstance, option: any) {
   const up = createLi('cm-up', lang.moveUp, 'PgUp')
   const down = createLi('cm-down', lang.moveDown, 'Pgdn')
   const link = createLi('cm-down', lang.link, '')
+  const upload = createLi('cm-upload', lang.upload, 'u')
   const summary = createLi('cm-down', lang.summary, '')
 
   const menuUl = document.createElement('ul')
@@ -49,6 +50,7 @@ export default function (mind: MindElixirInstance, option: any) {
   if (!option || option.link) {
     menuUl.appendChild(link)
   }
+  menuUl.appendChild(upload)
   if (option && option.extend) {
     for (let i = 0; i < option.extend.length; i++) {
       const item = option.extend[i]
@@ -134,6 +136,11 @@ export default function (mind: MindElixirInstance, option: any) {
 
   answer_child.onclick = () => {
     mind.answerChild()
+    menuContainer.hidden = true
+  }
+
+  answer_child.onclick = () => {
+    mind.upload()
     menuContainer.hidden = true
   }
 

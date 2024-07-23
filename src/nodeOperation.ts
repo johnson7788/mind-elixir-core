@@ -136,7 +136,9 @@ export const answerChild = async function (this: MindElixirInstance, el?: Topic,
         },
         body: JSON.stringify({
           node_id: nodeEle.nodeObj.id,
-          nodes: this.getData()
+          nodes: this.getData(),
+          language: this.locale,
+          singleNode: this.apiInterface.singleNode,
         }),
       })
       if (!response.ok) {
@@ -170,6 +172,53 @@ export const answerChild = async function (this: MindElixirInstance, el?: Topic,
     obj: newNodeObj,
   })
   console.timeEnd('answerChild')
+  if (!node) {
+    this.editTopic(newTop.firstChild)
+  }
+  this.selectNode(newTop.firstChild, true)
+}
+
+export const upload = async function (this: MindElixirInstance, el?: Topic, node?: NodeObj) {
+  //上传文件到节点，并且节点附加文件属性
+  console.time('upload')
+  const nodeEle = el || this.currentNode
+  if (!nodeEle) return
+  if (this.apiInterface?.uploadAPI) {
+    //获取模型返回结果,this.apiInterface.uploadAPI 是1个api 的url地址,用于上传文件
+    try {
+      //开始上传文件
+      })
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      const data = await response.json()
+      // 根据获取的数据进行相应的处理
+      console.log('API response:', data)
+      if (data.code === 0) {
+        const content = data.data
+        const id = generateUUID()
+        node =  {
+          topic: content,
+          id,
+        }
+      } else {
+        alert(`Failed to fetch data from the API, ${data.msg}`)
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error)
+      alert(`Failed to fetch data from the API, ${this.apiInterface.answerAPI}`)
+    }
+  } else {
+    alert('options里面的apiInterface中的answerAPI is not defined')
+  }
+  const res = addChildFunc(this, nodeEle, node)
+  if (!res) return
+  const { newTop, newNodeObj } = res
+  this.bus.fire('operation', {
+    name: 'upload',
+    obj: newNodeObj,
+  })
+  console.timeEnd('upload')
   if (!node) {
     this.editTopic(newTop.firstChild)
   }

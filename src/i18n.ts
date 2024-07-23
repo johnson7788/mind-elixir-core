@@ -11,6 +11,7 @@ type LangPack = {
   link: string
   clickTips: string
   summary: string
+  upload: string
 }
 const cn = {
   answerChild: '回答并插入子节点',
@@ -25,6 +26,7 @@ const cn = {
   link: '连接',
   clickTips: '请点击目标节点',
   summary: '摘要',
+  upload: '上传',
 }
 const i18n: Record<string, LangPack> = {
   cn,
@@ -42,6 +44,7 @@ const i18n: Record<string, LangPack> = {
     link: '連接',
     clickTips: '請點擊目標節點',
     summary: '摘要',
+    upload: '上传',
   },
   en: {
     answerChild: 'Answer and Add child',
@@ -56,6 +59,7 @@ const i18n: Record<string, LangPack> = {
     link: 'Link',
     clickTips: 'Please click the target node',
     summary: 'Summary',
+    upload: 'Upload',
   },
   ru: {
     answerChild: 'Добавить дочерний элемент',
@@ -70,6 +74,7 @@ const i18n: Record<string, LangPack> = {
     link: 'Ссылка',
     clickTips: 'Пожалуйста, нажмите на целевой узел',
     summary: 'Описание',
+    upload: 'Описание',
   },
   ja: {
     answerChild: '子ノードを追加する',
@@ -84,6 +89,7 @@ const i18n: Record<string, LangPack> = {
     link: 'コネクト',
     clickTips: 'ターゲットノードをクリックしてください',
     summary: '概要',
+    upload: '概要',
   },
   pt: {
     answerChild: 'Adicionar item filho',
@@ -98,6 +104,7 @@ const i18n: Record<string, LangPack> = {
     link: 'Link',
     clickTips: 'Favor clicar no item alvo',
     summary: 'Resumo',
+    upload: 'Resumo',
   },
   it: {
     answerChild: 'Aggiungi figlio',
@@ -112,6 +119,7 @@ const i18n: Record<string, LangPack> = {
     link: 'Collega',
     clickTips: 'Si prega di fare clic sul nodo di destinazione',
     summary: 'Unisci nodi',
+    upload: 'Unisci nodi',
   },
   es: {
     answerChild: 'Agregar hijo',
@@ -126,6 +134,7 @@ const i18n: Record<string, LangPack> = {
     link: 'Enlace',
     clickTips: 'Por favor haga clic en el nodo de destino',
     summary: 'Resumen',
+    upload: 'Resumen',
   },
 }
 
