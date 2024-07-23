@@ -16,7 +16,7 @@ export const rmSubline = function (tpc: Topic) {
   const lc = mainNode.lastElementChild
   if (lc?.tagName === 'svg') lc?.remove() // clear svg group of main node
 }
-
+//reshapeNode： tpc是原节点， patchData是修改后的节点
 export const reshapeNode = function (this: MindElixirInstance, tpc: Topic, patchData: NodeObj) {
   const nodeObj = tpc.nodeObj
   const origin = deepClone(nodeObj)
@@ -168,7 +168,7 @@ export const answerChild = async function (this: MindElixirInstance, el?: Topic,
   if (!res) return
   const { newTop, newNodeObj } = res
   this.bus.fire('operation', {
-    name: 'addChild',
+    name: 'answerChild',
     obj: newNodeObj,
   })
   console.timeEnd('answerChild')
@@ -179,51 +179,78 @@ export const answerChild = async function (this: MindElixirInstance, el?: Topic,
 }
 
 export const upload = async function (this: MindElixirInstance, el?: Topic, node?: NodeObj) {
-  //上传文件到节点，并且节点附加文件属性
-  console.time('upload')
-  const nodeEle = el || this.currentNode
-  if (!nodeEle) return
-  if (this.apiInterface?.uploadAPI) {
-    //获取模型返回结果,this.apiInterface.uploadAPI 是1个api 的url地址,用于上传文件
+  // 上传文件到节点，并且节点附加文件属性
+  console.time('upload');
+  const nodeEle = el || this.currentNode;
+  if (!nodeEle) {
+    console.error('No node selected');
+    return;
+  }
+
+  if (!this.apiInterface?.uploadAPI) {
+    alert('The uploadAPI is not defined in the apiInterface');
+    return;
+  }
+
+  // 创建一个文件选择对话框
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'image/*'; // 只接受图片文件
+  input.onchange = async () => {
+    const file = input.files?.[0];
+    if (!file) {
+      alert('No file selected');
+      return;
+    }
+
+    // 创建 FormData 对象
+    const formData = new FormData();
+    formData.append('file', file);
+
+    // 强制将 this.apiInterface.uploadAPI 断言为 string 类型
+    const uploadAPI: string = this.apiInterface.uploadAPI;
     try {
-      //开始上传文件
-      })
+      // 上传文件到服务器
+      const response = await fetch(uploadAPI, {
+        method: 'POST',
+        body: formData,
+      });
+
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-      const data = await response.json()
-      // 根据获取的数据进行相应的处理
-      console.log('API response:', data)
+
+      const data = await response.json();
+      console.log('API response:', data);
+
       if (data.code === 0) {
-        const content = data.data
-        const id = generateUUID()
-        node =  {
-          topic: content,
-          id,
+        const filePath = data.data.filePath;
+        const filename = data.data.filename;
+        const fileUrl = `${this.apiInterface.uploadAPI}/${filePath}`;
+        let patchData = node || nodeEle.nodeObj
+        patchData.file = {
+          url: fileUrl,
+          name: filename,
         }
+        const res = this.reshapeNode(nodeEle, patchData);
+        this.bus.fire('operation', {
+          name: 'upload',
+          obj: patchData,
+        });
+
+        console.timeEnd('upload');
       } else {
-        alert(`Failed to fetch data from the API, ${data.msg}`)
+        alert(`Failed to fetch data from the API, ${data.msg}`);
       }
     } catch (error) {
-      console.error('Error fetching data:', error)
-      alert(`Failed to fetch data from the API, ${this.apiInterface.answerAPI}`)
+      console.error('Error fetching data:', error);
+      alert(`Failed to fetch data from the API, ${this.apiInterface.uploadAPI}`);
     }
-  } else {
-    alert('options里面的apiInterface中的answerAPI is not defined')
-  }
-  const res = addChildFunc(this, nodeEle, node)
-  if (!res) return
-  const { newTop, newNodeObj } = res
-  this.bus.fire('operation', {
-    name: 'upload',
-    obj: newNodeObj,
-  })
-  console.timeEnd('upload')
-  if (!node) {
-    this.editTopic(newTop.firstChild)
-  }
-  this.selectNode(newTop.firstChild, true)
-}
+  };
+
+  // 触发文件选择对话框
+  input.click();
+};
 
 export const addChild = function (this: MindElixirInstance, el?: Topic, node?: NodeObj) {
   console.time('addChild')

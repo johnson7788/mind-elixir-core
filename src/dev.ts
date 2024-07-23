@@ -100,7 +100,7 @@ mind.bus.addListener('operation', (operation: Operation) => {
 })
 mind.bus.addListener('selectNode', node => {
   console.log(node)
-  InsertNodeImage("http://127.0.0.1:5556/image/dog.jpg", node)
+  // InsertNodeImage("http://127.0.0.1:5556/image/dog.jpg", node)
 })
 
 function InsertNodeImage(imageUrl: string, node:any) {

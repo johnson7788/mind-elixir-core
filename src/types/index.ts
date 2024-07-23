@@ -34,9 +34,9 @@ export type Theme = {
 }
 
 export type apiInterface  = {
-  singleNode?: boolean
-  answerAPI?: string 
-  uploadAPI?: string 
+  singleNode: boolean
+  answerAPI: string 
+  uploadAPI: string 
 }
 
 /**
@@ -168,6 +168,11 @@ export type NodeObj = {
     url: string
     width: number
     height: number
+  }
+  //用户上传的文件
+  file?: {
+    url: string
+    name: string
   }
   // main node specific properties
   branchColor?: string
