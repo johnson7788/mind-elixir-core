@@ -178,6 +178,11 @@ export const answerChild = async function (this: MindElixirInstance, el?: Topic,
   this.selectNode(newTop.firstChild, true)
 }
 
+const getBaseUrl = (url: string): string => {
+  const { protocol, hostname, port } = new URL(url);
+  return `${protocol}//${hostname}${port ? `:${port}` : ''}/`;
+};
+
 export const upload = async function (this: MindElixirInstance, el?: Topic, node?: NodeObj) {
   // 上传文件到节点，并且节点附加文件属性
   console.time('upload');
@@ -195,7 +200,7 @@ export const upload = async function (this: MindElixirInstance, el?: Topic, node
   // 创建一个文件选择对话框
   const input = document.createElement('input');
   input.type = 'file';
-  input.accept = 'image/*'; // 只接受图片文件
+  // input.accept = 'image/*'; // 接受任何文件，就不设置了
   input.onchange = async () => {
     const file = input.files?.[0];
     if (!file) {
@@ -226,7 +231,8 @@ export const upload = async function (this: MindElixirInstance, el?: Topic, node
       if (data.code === 0) {
         const filePath = data.data.filePath;
         const filename = data.data.filename;
-        const fileUrl = `${this.apiInterface.uploadAPI}/${filePath}`;
+        const baseUrl = getBaseUrl(uploadAPI);
+        const fileUrl = `${baseUrl}${filePath}`;
         let patchData = node || nodeEle.nodeObj
         patchData.file = {
           url: fileUrl,
