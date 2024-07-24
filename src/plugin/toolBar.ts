@@ -1,21 +1,22 @@
 import type { MindElixirInstance } from '../types/index'
 import './toolBar.less'
 
-const createButton = (id: string, name: string) => {
+const createButton = (id: string, name: string, title: string) => {
   const button = document.createElement('span')
   button.id = id
   button.innerHTML = `<svg class="icon" aria-hidden="true">
     <use xlink:href="#icon-${name}"></use>
   </svg>`
+  button.title = title; // 添加 title 属性
   return button
 }
 
 function createToolBarRBContainer(mind: MindElixirInstance) {
   const toolBarRBContainer = document.createElement('div')
-  const fc = createButton('fullscreen', 'full')
-  const gc = createButton('toCenter', 'living')
-  const zo = createButton('zoomout', 'move')
-  const zi = createButton('zoomin', 'add')
+  const fc = createButton('fullscreen', 'full', '全屏显示') // 添加提示
+  const gc = createButton('toCenter', 'living', '居中显示')
+  const zo = createButton('zoomout', 'move', '缩小')
+  const zi = createButton('zoomin', 'add', '放大')
   const percentage = document.createElement('span')
   percentage.innerText = '100%'
   toolBarRBContainer.appendChild(fc)
@@ -40,12 +41,13 @@ function createToolBarRBContainer(mind: MindElixirInstance) {
   }
   return toolBarRBContainer
 }
+
 function createToolBarLTContainer(mind: MindElixirInstance) {
   const toolBarLTContainer = document.createElement('div')
-  const l = createButton('tbltl', 'left')
-  const r = createButton('tbltr', 'right')
-  const s = createButton('tblts', 'side')
-  const multinode = createButton('multinode', 'menu')
+  const l = createButton('tbltl', 'left', '左对齐')
+  const r = createButton('tbltr', 'right', '右对齐')
+  const s = createButton('tblts', 'side', '两侧对齐')
+  const multinode = createButton('multinode', 'menu', '多节点生成')
 
   toolBarLTContainer.appendChild(l)
   toolBarLTContainer.appendChild(r)
@@ -62,7 +64,7 @@ function createToolBarLTContainer(mind: MindElixirInstance) {
     mind.initSide()
   }
   multinode.onclick = () => {
-    const svg = multinode.firstElementChild as SVGElement; // 将类型转换为 SVGElement; // 获取第一个子元素（svg 元素）
+    const svg = multinode.firstElementChild as SVGElement; // 将类型转换为 SVGElement
     if (svg) {
       if (mind.apiInterface.singleNode) {
         svg.style.fill = ''; // 恢复默认颜色
