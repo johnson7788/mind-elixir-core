@@ -66,12 +66,13 @@ function createToolBarLTContainer(mind: MindElixirInstance) {
   multinode.onclick = () => {
     const svg = multinode.firstElementChild as SVGElement; // 将类型转换为 SVGElement
     if (svg) {
-      if (mind.apiInterface.singleNode) {
-        svg.style.fill = ''; // 恢复默认颜色
-      } else {
-        svg.style.fill = 'blue'; // 设置为蓝色, 多节点回答模式
-      }
+      //点击时就开始切换状态
       mind.apiInterface.singleNode = !mind.apiInterface.singleNode; // 切换状态
+      if (mind.apiInterface.singleNode) {
+        svg.style.fill = ''; // 恢复默认颜色，AI生成单个节点
+      } else {
+        svg.style.fill = 'blue'; // 设置为蓝色, AI生成多个节点
+      }
     }
   };
   return toolBarLTContainer
