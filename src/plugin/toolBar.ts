@@ -45,10 +45,12 @@ function createToolBarLTContainer(mind: MindElixirInstance) {
   const l = createButton('tbltl', 'left')
   const r = createButton('tbltr', 'right')
   const s = createButton('tblts', 'side')
+  const multinode = createButton('multinode', 'menu')
 
   toolBarLTContainer.appendChild(l)
   toolBarLTContainer.appendChild(r)
   toolBarLTContainer.appendChild(s)
+  toolBarLTContainer.appendChild(multinode)
   toolBarLTContainer.className = 'mind-elixir-toolbar lt'
   l.onclick = () => {
     mind.initLeft()
@@ -59,6 +61,17 @@ function createToolBarLTContainer(mind: MindElixirInstance) {
   s.onclick = () => {
     mind.initSide()
   }
+  multinode.onclick = () => {
+    const svg = multinode.firstElementChild as SVGElement; // 将类型转换为 SVGElement; // 获取第一个子元素（svg 元素）
+    if (svg) {
+      if (mind.apiInterface.singleNode) {
+        svg.style.fill = ''; // 恢复默认颜色
+      } else {
+        svg.style.fill = 'blue'; // 设置为蓝色, 多节点回答模式
+      }
+      mind.apiInterface.singleNode = !mind.apiInterface.singleNode; // 切换状态
+    }
+  };
   return toolBarLTContainer
 }
 
