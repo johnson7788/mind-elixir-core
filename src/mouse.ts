@@ -20,9 +20,11 @@ export default function (mind: MindElixirInstance) {
       dragMoveHelper.clear()
       return
     }
+    const target = e.target as any
+
     mind.clearSelection()
     // e.preventDefault() // can cause <a /> tags don't work
-    const target = e.target as any
+
     if (target.classList && target.classList.contains('info-box')) {
       // 在info-box中点击，不进行处理
       return;

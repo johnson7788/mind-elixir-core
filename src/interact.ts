@@ -31,44 +31,48 @@ export const selectNode = function (this: MindElixirInstance, targetElement: Top
   // 如果节点有file或hyperLink属性，则显示信息框
   if (nodeObj.file || nodeObj.hyperLink) {
     let infoBox = targetElement.querySelector('.info-box')
-    if (!infoBox) {
+    if (infoBox) {
+      // 如果 infoBox 存在，则删除它
+      infoBox.remove()
+    } else {
+      // 如果 infoBox 不存在，则创建它
       infoBox = document.createElement('div')
       infoBox.className = 'info-box'
       targetElement.appendChild(infoBox)
-    }
-    
-    infoBox.innerHTML = '' // 清空信息框的内容
-    if (nodeObj.file) {
-      const fileLink = document.createElement('a')
-      fileLink.href = nodeObj.file.url
-      fileLink.innerText = `File: ${nodeObj.file.name}`
-      fileLink.target = '_blank'
-      infoBox.appendChild(fileLink)
-    }
 
-    if (nodeObj.hyperLink) {
-      const hyperLink = document.createElement('a')
-      hyperLink.href = nodeObj.hyperLink
-      hyperLink.innerText = '🔗'
-      hyperLink.target = '_blank'
-      infoBox.appendChild(hyperLink)
+      infoBox.innerHTML = '' // 清空信息框的内容
+      if (nodeObj.file) {
+        const fileLink = document.createElement('a')
+        fileLink.href = nodeObj.file.url
+        fileLink.innerText = `File: ${nodeObj.file.name}`
+        fileLink.target = '_blank'
+        infoBox.appendChild(fileLink)
+      }
+
+      if (nodeObj.hyperLink) {
+        const hyperLink = document.createElement('a')
+        hyperLink.href = nodeObj.hyperLink
+        hyperLink.innerText = '🔗'
+        hyperLink.target = '_blank'
+        infoBox.appendChild(hyperLink)
+      }
+
+      // 阻止 infoBox 上除链接外的事件传播
+      infoBox.addEventListener('click', (event: Event) => {
+        if (!(event.target instanceof HTMLAnchorElement)) {
+          // event.stopPropagation()
+        }
+        console.log('infoBox clicked'); // 确认事件是否触发
+      })
+
+      // 添加双击事件处理
+      infoBox.addEventListener('dblclick', (event: Event) => {
+        event.preventDefault()
+        // 打开编辑对话框或其他编辑方式
+        // this.editNodeAttributes(nodeObj)
+        console.log('infoBox dbclicked'); // 确认事件是否触发
+      })
     }
-    // 阻止 infoBox 上除链接外的事件传播
-    // infoBox.addEventListener('click', (event: Event) => {
-    //   if (!(event.target instanceof HTMLAnchorElement)) {
-    //     // event.stopPropagation()
-    //   }
-    //   console.log('infoBox clicked'); // 确认事件是否触发
-    // })
-
-    // 添加双击事件处理
-    infoBox.addEventListener('dblclick', (event: Event) => {
-      // event.preventDefault()
-      // 打开编辑对话框或其他编辑方式
-      // this.editNodeAttributes(nodeObj)
-      console.log('infoBox dbclicked'); // 确认事件是否触发
-
-    })
   }
 
   if (isNewNode) {
@@ -83,11 +87,6 @@ export const selectNode = function (this: MindElixirInstance, targetElement: Top
 export const unselectNode = function (this: MindElixirInstance) {
   if (this.currentNode) {
     this.currentNode.className = ''
-      // 查找并移除 .info-box 元素
-    const infoBox = this.currentNode.querySelector('.info-box');
-    if (infoBox) {
-      this.currentNode.removeChild(infoBox);
-    }
   }
   this.currentNode = null
   this.bus.fire('unselectNode')
