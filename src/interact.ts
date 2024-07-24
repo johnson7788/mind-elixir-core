@@ -49,7 +49,7 @@ export const selectNode = function (this: MindElixirInstance, targetElement: Top
     if (nodeObj.hyperLink) {
       const hyperLink = document.createElement('a')
       hyperLink.href = nodeObj.hyperLink
-      hyperLink.innerText = 'Hyperlink'
+      hyperLink.innerText = '🔗'
       hyperLink.target = '_blank'
       infoBox.appendChild(hyperLink)
     }
