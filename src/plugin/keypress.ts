@@ -80,6 +80,10 @@ export default function (mind: MindElixirInstance) {
       // a，回答xx
       mind.answerChild()
     },
+    85: () => {
+      // u，插入文件
+      mind.upload()
+    },
     9: () => {
       // tab
       mind.addChild()
