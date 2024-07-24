@@ -64,6 +64,18 @@ export const shapeTpc = function (tpc: Topic, nodeObj: NodeObj) {
     tpc.linkContainer = undefined
   }
 
+  if (nodeObj.file) {
+    const fileContainer = $d.createElement('a')
+    fileContainer.className = 'file-link'
+    fileContainer.target = '_blank'
+    fileContainer.innerText = nodeObj.file.name
+    fileContainer.href = nodeObj.file.url
+    tpc.appendChild(fileContainer)
+    tpc.fileContainer = fileContainer
+  } else if (tpc.fileContainer) {
+    tpc.fileContainer = undefined
+  }
+
   if (nodeObj.icons && nodeObj.icons.length) {
     const iconsContainer = $d.createElement('span')
     iconsContainer.className = 'icons'

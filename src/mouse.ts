@@ -11,6 +11,7 @@ export default function (mind: MindElixirInstance) {
       mind.helper1.clear()
       return
     }
+
     if (mind.helper2?.moved) {
       mind.helper2.clear()
       return
@@ -22,6 +23,11 @@ export default function (mind: MindElixirInstance) {
     mind.clearSelection()
     // e.preventDefault() // can cause <a /> tags don't work
     const target = e.target as any
+    if (target.classList && target.classList.contains('info-box')) {
+      // 在info-box中点击，不进行处理
+      return;
+    }
+
     if (target.tagName === 'ME-EPD') {
       mind.expandNode((target as Expander).previousSibling)
     } else if (isTopic(target)) {
