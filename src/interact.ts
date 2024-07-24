@@ -83,6 +83,11 @@ export const selectNode = function (this: MindElixirInstance, targetElement: Top
 export const unselectNode = function (this: MindElixirInstance) {
   if (this.currentNode) {
     this.currentNode.className = ''
+      // 查找并移除 .info-box 元素
+    const infoBox = this.currentNode.querySelector('.info-box');
+    if (infoBox) {
+      this.currentNode.removeChild(infoBox);
+    }
   }
   this.currentNode = null
   this.bus.fire('unselectNode')
