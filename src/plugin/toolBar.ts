@@ -47,7 +47,7 @@ function createToolBarLTContainer(mind: MindElixirInstance) {
   const l = createButton('tbltl', 'left', '左对齐')
   const r = createButton('tbltr', 'right', '右对齐')
   const s = createButton('tblts', 'side', '两侧对齐')
-  const multinode = createButton('multinode', 'menu', '多节点生成')
+  const multinode = createButton('multinode', 'multinode', '多节点生成')
 
   toolBarLTContainer.appendChild(l)
   toolBarLTContainer.appendChild(r)
@@ -71,7 +71,7 @@ function createToolBarLTContainer(mind: MindElixirInstance) {
       if (mind.apiInterface.singleNode) {
         svg.style.fill = ''; // 恢复默认颜色，AI生成单个节点
       } else {
-        svg.style.fill = 'blue'; // 设置为蓝色, AI生成多个节点
+        svg.style.fill = 'red'; // 设置为红色, AI生成多个节点
       }
     }
   };
