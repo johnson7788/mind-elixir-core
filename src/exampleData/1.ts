@@ -97,6 +97,22 @@ const aboutMindElixir: MindElixirData = {
         ],
       },
       {
+        topic: '问答测试',
+        id: 'bd1b9b94a9a7a915',
+        direction: 1,
+        expanded: true,
+        children: [
+          {
+            topic: '如何更快乐？',
+            id: 'bd1bb2ac4bbab457',
+          },
+          {
+            topic: '帮我总结下这篇文章',
+            id: 'bd1bb4b14d6697c2',
+          },
+        ],
+      },
+      {
         topic: 'Focus mode',
         id: 'bd1b9b94a9a7a913',
         direction: 1,

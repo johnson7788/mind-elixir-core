@@ -179,6 +179,10 @@ export default function (mind: MindElixirInstance) {
     46: handleRemove,
   }
   mind.map.onkeydown = e => {
+    // 排除 Command + Option + I (打开开发者工具)
+    if (e.metaKey && e.altKey && e.keyCode === 73) {
+      return; // 允许默认行为
+    }
     e.preventDefault()
     if (!mind.editable) return
     // console.log(e, e.target)

@@ -66,13 +66,14 @@ const options: Options = {
 
 const mind = new MindElixir(options)
 
-const data = MindElixir.new('new topic')
+// const data = MindElixir.new('new topic')
 mind.init(example)
 
-const m2 = new MindElixir({
-  el: '#map2',
-})
-m2.init(data)
+// 可以同时设置2个思维导图，但这里不设置2个思维导图了
+// const m2 = new MindElixir({
+//   el: '#map2',
+// })
+// m2.init(data)
 
 function sleep() {
   return new Promise<void>(res => {
