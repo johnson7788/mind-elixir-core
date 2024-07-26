@@ -80,6 +80,26 @@ export default function (mind: MindElixirInstance) {
       // a，回答xx
       mind.answerChild()
     },
+    68: () => {
+      // d, 下载文件
+      mind.downloadImage("png")
+    },
+    77: () => {
+      // m, 切换multinode模式
+      //点击时就开始切换状态
+      mind.apiInterface.singleNode = !mind.apiInterface.singleNode; // 切换状态
+      const ele = document.querySelector('#multinode') as HTMLElement | null;
+      if (ele) {
+        const svg = ele.querySelector('use') as SVGUseElement | null; // 选择嵌套的 <use> 元素
+        if (svg) {
+          if (mind.apiInterface.singleNode) {
+            svg.style.fill = ''; // 恢复默认颜色，AI生成单个节点
+          } else {
+            svg.style.fill = 'red'; // 设置为红色, AI生成多个节点
+          }
+        }
+      }
+    },
     85: () => {
       // u，插入文件
       mind.upload()
