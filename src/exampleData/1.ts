@@ -18,7 +18,7 @@ const aboutMindElixir: MindElixirData = {
             id: 'use-image',
             topic: 'mind-elixir',
             image: {
-              url: 'https://raw.githubusercontent.com/ssshooter/mind-elixir-core/master/images/logo2.png',
+              url: 'https://ss0.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1423093021,3517484514&fm=253&gp=0.jpg',
               height: 90,
               width: 90,
             },
