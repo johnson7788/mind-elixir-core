@@ -77,8 +77,8 @@ function createToolBarLTContainer(mind: MindElixirInstance) {
       }
     }
   };
-  downpng.onclick = () => {
-    mind.initSide()
+  downpng.onclick = async () => {
+    await mind.downloadImage("png")
   }
   return toolBarLTContainer
 }

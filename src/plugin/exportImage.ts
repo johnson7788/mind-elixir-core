@@ -2,6 +2,8 @@ import type { Topic } from '../types/dom'
 import type { MindElixirInstance } from '../types'
 import { setAttributes } from '../utils'
 import { getOffsetLT, isTopic } from '../utils'
+import style from '../../index.css?raw'
+import katex from '../../katex.css?raw'
 
 const ns = 'http://www.w3.org/2000/svg'
 function createSvgDom(height: string, width: string) {
@@ -260,4 +262,21 @@ export const exportPng = async function (this: MindElixirInstance, noForeignObje
     img.src = url
     img.onerror = reject
   })
+}
+
+export const downloadImage = async function (this: MindElixirInstance, type: 'svg' | 'png') {
+  try {
+    let blob = null
+    if (type === 'png') blob = await this.exportPng(false, style + katex)
+    else blob = await this.exportSvg(false, style + katex)
+    if (!blob) return
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = 'filename.' + type
+    a.click()
+    URL.revokeObjectURL(url)
+  } catch (e) {
+    console.error(e)
+  }
 }
