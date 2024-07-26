@@ -181,6 +181,8 @@ export type NodeObj = {
   // TODO: checkbox
   // checkbox?: boolean | undefined
   dangerouslySetInnerHTML?: string
+  //代表是ai回答的节点，只有当是aiAnswer时才是true
+  aiAnswer?: boolean
 }
 export type NodeObjExport = Omit<NodeObj, 'parent'>
 

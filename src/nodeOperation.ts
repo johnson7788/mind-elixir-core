@@ -154,6 +154,7 @@ export const answerChild = async function (this: MindElixirInstance, el?: Topic,
         node =  {
           topic: content,
           id,
+          aiAnswer: true, //表示是ai回答的答案
         }
       } else {
         alert(`Failed to fetch data from the API, ${data.msg}`)
