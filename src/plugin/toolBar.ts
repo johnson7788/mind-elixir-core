@@ -48,11 +48,13 @@ function createToolBarLTContainer(mind: MindElixirInstance) {
   const r = createButton('tbltr', 'right', '右对齐')
   const s = createButton('tblts', 'side', '两侧对齐')
   const multinode = createButton('multinode', 'multinode', '多节点生成')
+  const downpng = createButton('downpng', 'download', '下载png')
 
   toolBarLTContainer.appendChild(l)
   toolBarLTContainer.appendChild(r)
   toolBarLTContainer.appendChild(s)
   toolBarLTContainer.appendChild(multinode)
+  toolBarLTContainer.appendChild(downpng)
   toolBarLTContainer.className = 'mind-elixir-toolbar lt'
   l.onclick = () => {
     mind.initLeft()
@@ -75,6 +77,9 @@ function createToolBarLTContainer(mind: MindElixirInstance) {
       }
     }
   };
+  downpng.onclick = () => {
+    mind.initSide()
+  }
   return toolBarLTContainer
 }
 
