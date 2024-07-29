@@ -75,6 +75,40 @@ export const selectNode = function (this: MindElixirInstance, targetElement: Top
     }
   }
 
+  if (nodeObj.aiAnswer) {
+    // 如果发现节点是ai的节点，即拥有aiAnswer的属性,那么在节点右侧添加迷你图标
+    let iconBox = targetElement.querySelector('.ai-icon')
+    if (iconBox) {
+      // 如果 iconBox 存在，则删除它
+      iconBox.remove()
+    } else {
+      // 如果 iconBox 不存在，则创建它
+      iconBox = document.createElement('div')
+      iconBox.className = 'ai-icon'
+      targetElement.appendChild(iconBox)
+
+      // 添加 Retry 图标
+      const retryIcon = document.createElement('span')
+      retryIcon.className = 'icon-retry'
+      retryIcon.innerText = '🔄' // 重试图标，可以替换为实际的图标或图片
+      iconBox.appendChild(retryIcon)
+      retryIcon.addEventListener('click', () => {
+        console.log('Retry icon clicked')
+        // 在这里添加重试操作的逻辑
+      })
+
+      // 添加 Like 图标
+      const likeIcon = document.createElement('span')
+      likeIcon.className = 'icon-like'
+      likeIcon.innerText = '👍' // 喜欢图标，可以替换为实际的图标或图片
+      iconBox.appendChild(likeIcon)
+      likeIcon.addEventListener('click', () => {
+        console.log('Like icon clicked')
+        // 在这里添加喜欢操作的逻辑
+      })
+    }
+  }
+
   if (isNewNode) {
     this.bus.fire('selectNewNode', targetElement.nodeObj)
   } else {

@@ -1,5 +1,5 @@
 import './nodeOperation.less'
-import { fillParent, refreshIds, unionTopics,generateUUID } from './utils/index'
+import { fillParent, refreshIds, unionTopics, generateUUID } from './utils/index'
 import { findEle, createExpander, shapeTpc } from './utils/dom'
 import { deepClone } from './utils/index'
 import type { Topic } from './types/dom'
@@ -124,9 +124,22 @@ export const insertParent = function (this: MindElixirInstance, el?: Topic, node
 }
 
 export const answerChild = async function (this: MindElixirInstance, el?: Topic, node?: NodeObj) {
+  //el:是要回答问题的节点，node:表示新生成的节点的模版
   console.time('answerChild')
   const nodeEle = el || this.currentNode
   if (!nodeEle) return
+  // 创建一个 loading 状态的图标
+  const loadingElement = document.createElement('div');
+  loadingElement.innerHTML = 'Loading...'; // 可以换成你的加载图标
+  loadingElement.style.position = 'fixed';
+  loadingElement.style.top = '50%';
+  loadingElement.style.left = '50%';
+  loadingElement.style.transform = 'translate(-50%, -50%)';
+  loadingElement.style.backgroundColor = '#fff';
+  loadingElement.style.padding = '10px';
+  loadingElement.style.borderRadius = '5px';
+  loadingElement.style.boxShadow = '0px 0px 10px rgba(0, 0, 0, 0.1)';
+  document.body.appendChild(loadingElement); // 添加到 DOM 中显示加载状态
   if (this.apiInterface?.answerAPI) {
     //获取模型返回结果,this.apiInterface.answerAPI 是1个api 的url地址,使用fetch请求获取数据, Post 请求, 请求的参数是nodeEle.nodeObj
     try {
@@ -151,7 +164,7 @@ export const answerChild = async function (this: MindElixirInstance, el?: Topic,
       if (data.code === 0) {
         const content = data.data
         const id = generateUUID()
-        node =  {
+        node = {
           topic: content,
           id,
           aiAnswer: true, //表示是ai回答的答案
@@ -174,10 +187,12 @@ export const answerChild = async function (this: MindElixirInstance, el?: Topic,
     obj: newNodeObj,
   })
   console.timeEnd('answerChild')
+  // 移除 loading 状态图标
+  document.body.removeChild(loadingElement);
   if (!node) {
     this.editTopic(newTop.firstChild)
   }
-  this.selectNode(newTop.firstChild, true)
+  this.selectNode(newTop.firstChild, true) //true表示，这是1个新的节点
 }
 
 const getBaseUrl = (url: string): string => {
