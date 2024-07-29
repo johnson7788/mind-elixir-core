@@ -94,7 +94,16 @@ export const selectNode = function (this: MindElixirInstance, targetElement: Top
       iconBox.appendChild(retryIcon)
       retryIcon.addEventListener('click', () => {
         console.log('Retry icon clicked')
-        // 在这里添加重试操作的逻辑
+        // 在这里添加重试操作的逻辑, 获取父节点，然后在父节点上调用answerChild
+        const parent = targetElement.parentElement.parentElement.parentElement.previousSibling
+        if (parent) {
+          const parentTopic = parent.firstChild
+          if (parentTopic) {
+            // 使用父节点的 nodeObj 调用 answerChild 方法
+            this.removeNode(targetElement) //移除当前节点，然后在重新回答
+            this.answerChild(parentTopic);
+          }
+        }
       })
 
       // 添加 Like 图标
@@ -104,7 +113,7 @@ export const selectNode = function (this: MindElixirInstance, targetElement: Top
       iconBox.appendChild(likeIcon)
       likeIcon.addEventListener('click', () => {
         console.log('Like icon clicked')
-        // 在这里添加喜欢操作的逻辑
+        // 在这里添加喜欢操作的逻辑, 这里根据节点的ID，通知服务器，哪个被喜欢了
       })
     }
   }

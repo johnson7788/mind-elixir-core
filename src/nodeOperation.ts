@@ -124,10 +124,14 @@ export const insertParent = function (this: MindElixirInstance, el?: Topic, node
 }
 
 export const answerChild = async function (this: MindElixirInstance, el?: Topic, node?: NodeObj) {
-  //el:是要回答问题的节点，node:表示新生成的节点的模版
+  //el:是要回答问题的节点，node:表示新生成的节点的模版, 如果已经存在node，说明是用户点击了retry重新生成的按钮
   console.time('answerChild')
   const nodeEle = el || this.currentNode
   if (!nodeEle) return
+  let isRetry = false; //是否是用户点击了retry按钮，如果存在已有节点，说明用户点击了retry按钮,我们不添加新的节点，直接修改已有节点
+  if (node) {
+    isRetry = true;
+  }
   // 创建一个 loading 状态的图标
   const loadingElement = document.createElement('div');
   loadingElement.innerHTML = 'Loading...'; // 可以换成你的加载图标
@@ -163,11 +167,18 @@ export const answerChild = async function (this: MindElixirInstance, el?: Topic,
       console.log('API response:', data)
       if (data.code === 0) {
         const content = data.data
-        const id = generateUUID()
-        node = {
-          topic: content,
-          id,
-          aiAnswer: true, //表示是ai回答的答案
+        if (node) {
+          //用户点击了retry按钮，重新生成的内容
+          node.topic = content
+          node.aiAnswer = true //表示是ai回答的答案
+        } else {
+          //新的节点
+          const id = generateUUID()
+          node = {
+            topic: content,
+            id,
+            aiAnswer: true, //表示是ai回答的答案
+          }
         }
       } else {
         alert(`Failed to fetch data from the API, ${data.msg}`)
