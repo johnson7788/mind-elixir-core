@@ -58,7 +58,7 @@ const options: Options = {
     },
   },
   apiInterface: {
-    singleNode: true, //生成单个节点
+    singleNode: false, //生成单个节点
     answerAPI: "http://localhost:5556/mind/answer",
     uploadAPI: "http://localhost:5556/mind/upload_file",
   }

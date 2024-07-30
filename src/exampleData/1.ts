@@ -107,6 +107,10 @@ const aboutMindElixir: MindElixirData = {
             id: 'bd1bb2ac4bbab457',
           },
           {
+            topic: '保持健康应该怎么做？',
+            id: 'dd1bb2ac4bbab458',
+          },
+          {
             topic: '帮我总结下这篇文章',
             id: 'bd1bb4b14d6697c2',
             file: {

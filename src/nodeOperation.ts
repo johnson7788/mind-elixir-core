@@ -36,6 +36,7 @@ export const reshapeNode = function (this: MindElixirInstance, tpc: Topic, patch
 }
 
 const addChildFunc = function (mei: MindElixirInstance, tpc: Topic, node?: NodeObj) {
+  //支持node是多个节点的嵌套类型
   if (!tpc) return null
   const nodeObj = tpc.nodeObj
   if (nodeObj.expanded === false) {
@@ -123,15 +124,12 @@ export const insertParent = function (this: MindElixirInstance, el?: Topic, node
   })
 }
 
-export const answerChild = async function (this: MindElixirInstance, el?: Topic, node?: NodeObj) {
-  //el:是要回答问题的节点，node:表示新生成的节点的模版, 如果已经存在node，说明是用户点击了retry重新生成的按钮
+export const answerChild = async function (this: MindElixirInstance, el?: Topic, node?: NodeObj, isRetry?: boolean) {
+  //对该节点进行问答，生成新的节点。el:是要回答问题的节点，node:表示新生成的节点的模版,暂时不用。如果已经存在node，说明是用户点击了retry重新生成的按钮
+  //是否是用户点击了retry按钮，如果存在已有节点，说明用户点击了retry按钮
   console.time('answerChild')
   const nodeEle = el || this.currentNode
   if (!nodeEle) return
-  let isRetry = false; //是否是用户点击了retry按钮，如果存在已有节点，说明用户点击了retry按钮,我们不添加新的节点，直接修改已有节点
-  if (node) {
-    isRetry = true;
-  }
   // 创建一个 loading 状态的图标
   const loadingElement = document.createElement('div');
   loadingElement.innerHTML = 'Loading...'; // 可以换成你的加载图标
@@ -157,6 +155,7 @@ export const answerChild = async function (this: MindElixirInstance, el?: Topic,
           nodes: this.getData(),
           language: this.locale,
           singleNode: this.apiInterface.singleNode,
+          isRetry: isRetry,
         }),
       })
       if (!response.ok) {
@@ -166,19 +165,43 @@ export const answerChild = async function (this: MindElixirInstance, el?: Topic,
       // 根据获取的数据进行相应的处理
       console.log('API response:', data)
       if (data.code === 0) {
-        const content = data.data
-        if (node) {
-          //用户点击了retry按钮，重新生成的内容
-          node.topic = content
-          node.aiAnswer = true //表示是ai回答的答案
-        } else {
-          //新的节点
-          const id = generateUUID()
-          node = {
-            topic: content,
-            id,
-            aiAnswer: true, //表示是ai回答的答案
+        const nodesArray: NodeObj[] = data.data //告诉编译器返回的数据类型，防止警告
+        if (nodesArray.length === 0) {
+          //如果返回的节点个数为1个，大概率是单节点模式，如果是多个，应该是多节点模式
+          alert(`No data returned from the API, ${data.msg}`)
+        } else if (nodesArray.length === 1) {
+          //返回节点数量为1个，创建1个新的节点即可
+          node = nodesArray[0]
+          node['aiAnswer'] = true
+          const res = addChildFunc(this, nodeEle, node)
+          if (!res) return
+          const { newTop, newNodeObj } = res
+          this.bus.fire('operation', {
+            name: 'answerChild',
+            obj: newNodeObj,
+          })
+          console.timeEnd('answerChild')
+          if (!node) {
+            this.editTopic(newTop.firstChild)
           }
+          this.selectNode(newTop.firstChild, true) //true表示，这是1个新的节点
+        } else {
+          //返回节点数量大于1个，创建多个新的节点, 有一个bug，这里嵌套的node的回答没有添加aiAnswer属性
+          nodesArray.forEach((nodeData) => {
+            nodeData['aiAnswer'] = true;
+            const res = addChildFunc(this, nodeEle, nodeData);
+            if (!res) return;
+            const { newTop, newNodeObj } = res;
+            this.bus.fire('operation', {
+              name: 'answerChild',
+              obj: newNodeObj,
+            });
+            if (!node) {
+              this.editTopic(newTop.firstChild)
+            }
+            // this.selectNode(newTop.firstChild, true) //true表示，这是1个新的节点, 多个节点，就不选中了
+          });
+          console.timeEnd('answerChild');
         }
       } else {
         alert(`Failed to fetch data from the API, ${data.msg}`)
@@ -190,20 +213,8 @@ export const answerChild = async function (this: MindElixirInstance, el?: Topic,
   } else {
     alert('options里面的apiInterface中的answerAPI is not defined')
   }
-  const res = addChildFunc(this, nodeEle, node)
-  if (!res) return
-  const { newTop, newNodeObj } = res
-  this.bus.fire('operation', {
-    name: 'answerChild',
-    obj: newNodeObj,
-  })
-  console.timeEnd('answerChild')
   // 移除 loading 状态图标
   document.body.removeChild(loadingElement);
-  if (!node) {
-    this.editTopic(newTop.firstChild)
-  }
-  this.selectNode(newTop.firstChild, true) //true表示，这是1个新的节点
 }
 
 const getBaseUrl = (url: string): string => {
