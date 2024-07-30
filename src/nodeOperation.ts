@@ -268,14 +268,29 @@ export const upload = async function (this: MindElixirInstance, el?: Topic, node
       console.log('API response:', data);
 
       if (data.code === 0) {
-        const filePath = data.data.filePath;
-        const filename = data.data.filename;
-        const baseUrl = getBaseUrl(uploadAPI);
-        const fileUrl = `${baseUrl}${filePath}`;
         let patchData = node || nodeEle.nodeObj
-        patchData.file = {
-          url: fileUrl,
-          name: filename,
+        if (data.data.is_image) {
+          // 用户上传的是图片，那么就显示图片
+          const imgPath = data.data.filePath;
+          const baseUrl = getBaseUrl(uploadAPI);
+          const imgUrl = `${baseUrl}${imgPath}`;
+          let patchData = node || nodeEle.nodeObj
+          patchData.image = {
+            url: imgUrl,
+            name: data.data.filename,
+            height: 90,
+            width: 90
+          }
+        } else {
+          // 普通的文件
+          const filePath = data.data.filePath;
+          const filename = data.data.filename;
+          const baseUrl = getBaseUrl(uploadAPI);
+          const fileUrl = `${baseUrl}${filePath}`;
+          patchData.file = {
+            url: fileUrl,
+            name: filename,
+          }
         }
         const res = this.reshapeNode(nodeEle, patchData);
         this.bus.fire('operation', {

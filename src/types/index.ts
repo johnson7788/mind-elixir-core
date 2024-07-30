@@ -168,6 +168,7 @@ export type NodeObj = {
     url: string
     width: number
     height: number
+    name?: string
   }
   //用户上传的文件
   file?: {
