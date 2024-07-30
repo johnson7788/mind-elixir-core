@@ -491,6 +491,8 @@ export const beginEdit = function (this: MindElixirInstance, el?: Topic) {
   const nodeEle = el || this.currentNode
   if (!nodeEle) return
   if (nodeEle.nodeObj.dangerouslySetInnerHTML) return
+  // 设置 currentNode 为选中的节点
+  this.currentNode = nodeEle
   this.editTopic(nodeEle)
 }
 

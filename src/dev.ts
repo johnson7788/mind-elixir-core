@@ -60,7 +60,7 @@ const options: Options = {
   apiInterface: {
     singleNode: false, //生成单个节点
     answerAPI: "http://localhost:5556/mind/answer",
-    uploadAPI: "http://localhost:5556/mind/upload_file",
+    uploadAPI: "http://localhost:5556/mind/upload_file", //上传文件和图片
   }
 }
 

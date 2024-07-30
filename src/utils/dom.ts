@@ -197,7 +197,63 @@ export const editTopic = function (this: MindElixirInstance, el: Topic) {
       origin,
     })
   })
+  //这里给双击进行编辑的节点添加paste事件，进行图片的粘贴
+  div.addEventListener('paste', e => {
+    const selectNode = el.nodeObj
+    const items = e.clipboardData?.items;
+    if (items) {
+      for (let item of items) {
+        if (item.type.startsWith('image/')) {
+          const file = item.getAsFile();
+          if (file) {
+            //更改下文件的名称，因为粘贴时，图片的名称都是相同的，所以需要更改下名称, 使用node_id作为前缀
+            uploadImage(this, selectNode, file);
+          }
+        }
+      }
+    }
+  })
   console.timeEnd('editTopic')
+}
+
+function uploadImage(mind: MindElixirInstance, node: NodeObj, file: File) {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('node_id', node.id);
+  fetch(mind.apiInterface.uploadAPI, {
+    method: 'POST',
+    body: formData,
+  })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Upload图片结果:', data)
+      if (data.code === 0) {
+        const imagePath = data.data.filePath; // 假设后台返回的 JSON 中有 imageUrl 字段
+        const url = new URL(mind.apiInterface.uploadAPI);
+        const prefix = `${url.protocol}//${url.host}`;
+        const imageUrl = `${prefix}/${imagePath}`;
+        InsertNodeImage(mind,node,imageUrl);
+      } else {
+        console.error('上传图片失败:', data.msg);
+      }
+    })
+    .catch(error => {
+      console.error('Error uploading image:', error);
+    });
+}
+
+function InsertNodeImage(mind: MindElixirInstance, node: NodeObj, imageUrl: string) {
+  // 获取当前选中的节点, 这个选中的节点总是为空
+  const tpc = mind.findEle(node.id)
+  // 插入图片到当前节点中
+  const image = {
+    url: imageUrl,
+    height: 90,
+    width: 90
+  };
+  node.image = image;
+  // 更新节点的属性
+  mind.reshapeNode(tpc, node);
 }
 
 export const createExpander = function (expanded: boolean | undefined): Expander {

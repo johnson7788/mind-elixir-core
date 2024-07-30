@@ -101,7 +101,7 @@ export const selectNode = function (this: MindElixirInstance, targetElement: Top
           if (parentTopic) {
             // 使用父节点的 nodeObj 调用 answerChild 方法
             this.removeNode(targetElement) //移除当前节点，然后在重新回答
-            this.answerChild(parentTopic);
+            this.answerChild(parentTopic,undefined,true);
           }
         }
       })

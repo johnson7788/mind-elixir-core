@@ -93,28 +93,4 @@ export default function (mind: MindElixirInstance) {
     e.preventDefault()
   })
   // 添加鼠标放上去的悬浮框功能， 不行，不好用，总是监听整个 map，而不是单个节点，不知道什么原因，应该遍历所有节点，然后添加事件监听器
-  // mind.map.addEventListener('mouseenter', e => {
-  //   const target = e.target as HTMLElement;
-  //   console.log('Target:', target, 'Tag Name:', target.tagName);
-  //   if (isTopic(target)) {
-  //     const hoverBox = document.createElement('div');
-  //     hoverBox.classList.add('hover-box');
-  //     hoverBox.innerHTML = '<span class="like-icon">👍</span>';
-
-  //     hoverBox.style.position = 'absolute';
-  //     hoverBox.style.top = `${e.pageY - 30}px`;
-  //     hoverBox.style.left = `${e.pageX}px`;
-
-  //     document.body.appendChild(hoverBox);
-
-  //     hoverBox.querySelector('.like-icon').addEventListener('click', () => {
-  //       console.log('点赞被点击');
-  //       // 处理点赞逻辑，例如增加点赞数等
-  //     });
-
-  //     target.addEventListener('mouseleave', () => {
-  //       hoverBox.remove();
-  //     }, { once: true });
-  //   }
-  // });
 }
