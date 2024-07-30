@@ -29,7 +29,7 @@ export const selectNode = function (this: MindElixirInstance, targetElement: Top
 
   const nodeObj = targetElement.nodeObj
   // 如果节点有file或hyperLink属性，则显示信息框
-  if (nodeObj.file || nodeObj.hyperLink) {
+  if (nodeObj.file || nodeObj.hyperLink || nodeObj.image) {
     let infoBox = targetElement.querySelector('.info-box')
     if (infoBox) {
       // 如果 infoBox 存在，则删除它
@@ -48,6 +48,17 @@ export const selectNode = function (this: MindElixirInstance, targetElement: Top
         fileLink.target = '_blank'
         infoBox.appendChild(fileLink)
       }
+      if (nodeObj.image) {
+        const imageLink = document.createElement('a')
+        imageLink.href = nodeObj.image.url
+        // 使用URL对象
+        const urlObject = new URL(nodeObj.image.url);
+        // 使用pathname获取路径部分，然后使用split("/")分割成数组，最后取数组的最后一个元素
+        const fileName = urlObject.pathname.split("/").pop();
+        imageLink.innerText = `Image: ${fileName}`
+        imageLink.target = '_blank'
+        infoBox.appendChild(imageLink)
+      }
 
       if (nodeObj.hyperLink) {
         const hyperLink = document.createElement('a')
@@ -56,6 +67,30 @@ export const selectNode = function (this: MindElixirInstance, targetElement: Top
         hyperLink.target = '_blank'
         infoBox.appendChild(hyperLink)
       }
+      // 添加删除小图标
+      const deleteIcon = document.createElement('span');
+      deleteIcon.className = 'delete-icon';
+      deleteIcon.innerText = '❌'; // 可以替换为实际的图标或图片
+      infoBox.appendChild(deleteIcon);
+      deleteIcon.style.position = 'absolute';
+      deleteIcon.style.top = '5px';
+      deleteIcon.style.right = '5px';
+      deleteIcon.style.cursor = 'pointer';
+      deleteIcon.addEventListener('click', (event: Event) => {
+        event.stopPropagation();
+        if (nodeObj.file) {
+          delete nodeObj.file;
+          this.reshapeNode(targetElement,nodeObj) //重新渲染下界面
+        } else if (nodeObj.image) {
+          delete nodeObj.image;
+          this.reshapeNode(targetElement,nodeObj) //重新渲染下界面
+        } else if (nodeObj.hyperLink) {
+          delete nodeObj.hyperLink;
+          this.reshapeNode(targetElement,nodeObj) //重新渲染下界面
+        }
+        infoBox!.remove();  //如果存在infoBox，则删除它
+        console.log('Delete icon clicked'); // 确认事件是否触发
+      });
 
       // 阻止 infoBox 上除链接外的事件传播
       infoBox.addEventListener('click', (event: Event) => {
@@ -101,7 +136,7 @@ export const selectNode = function (this: MindElixirInstance, targetElement: Top
           if (parentTopic) {
             // 使用父节点的 nodeObj 调用 answerChild 方法
             this.removeNode(targetElement) //移除当前节点，然后在重新回答
-            this.answerChild(parentTopic,undefined,true);
+            this.answerChild(parentTopic, undefined, true);
           }
         }
       })
