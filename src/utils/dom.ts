@@ -229,7 +229,7 @@ function uploadImage(mind: MindElixirInstance, node: NodeObj, file: File) {
       console.log('Upload图片结果:', data)
       if (data.code === 0) {
         const imagePath = data.data.filePath; // 假设后台返回的 JSON 中有 imageUrl 字段
-        const url = new URL(mind.apiInterface.uploadAPI);
+        const url = new URL(mind.apiInterface.uploadAPI); //这个URL和前端URL不一样，所以需要单独显示
         const prefix = `${url.protocol}//${url.host}`;
         const imageUrl = `${prefix}/${imagePath}`;
         InsertNodeImage(mind,node,imageUrl);
