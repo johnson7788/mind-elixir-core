@@ -285,8 +285,8 @@ export const upload = async function (this: MindElixirInstance, el?: Topic, node
         if (data.data.is_image) {
           // 用户上传的是图片，那么就显示图片
           const imgPath = data.data.filePath;
-          // const baseUrl = getBaseUrl(uploadAPI); //对于服务器上的图片，不需要baseurl前缀
-          const imgUrl = `/${imgPath}`;
+          const baseUrl = getBaseUrl(uploadAPI);
+          const imgUrl = `${baseUrl}${imgPath}`;
           let patchData = node || nodeEle.nodeObj
           patchData.image = {
             url: imgUrl,
@@ -298,8 +298,8 @@ export const upload = async function (this: MindElixirInstance, el?: Topic, node
           // 普通的文件
           const filePath = data.data.filePath;
           const filename = data.data.filename;
-          // const baseUrl = getBaseUrl(uploadAPI); //对于服务器上的图片，不需要baseurl前缀
-          const fileUrl = `/${filePath}`;
+          const baseUrl = getBaseUrl(uploadAPI);
+          const fileUrl = `${baseUrl}${filePath}`;
           patchData.file = {
             url: fileUrl,
             name: filename,
