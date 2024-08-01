@@ -61,6 +61,7 @@ const options: Options = {
     singleNode: false, //生成单个节点
     answerAPI: "http://localhost:5556/mind/answer",
     uploadAPI: "http://localhost:5556/mind/upload_file", //上传文件和图片
+    headerToken: "access_token", //上传文件和图片时，请求头中的token字段
   }
 }
 

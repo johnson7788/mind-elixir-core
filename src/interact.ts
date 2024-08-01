@@ -28,87 +28,87 @@ export const selectNode = function (this: MindElixirInstance, targetElement: Top
   this.currentNode = targetElement
 
   const nodeObj = targetElement.nodeObj
-  // 如果节点有file或hyperLink属性，则显示信息框
-  if (nodeObj.file || nodeObj.hyperLink || nodeObj.image) {
-    let infoBox = targetElement.querySelector('.info-box')
-    if (infoBox) {
-      // 如果 infoBox 存在，则删除它
-      infoBox.remove()
-    } else {
-      // 如果 infoBox 不存在，则创建它
-      infoBox = document.createElement('div')
-      infoBox.className = 'info-box'
-      targetElement.appendChild(infoBox)
+  // 如果节点有file或hyperLink属性，则显示信息框, 这里不用了，使用node-menu插件代替了
+  // if (nodeObj.file || nodeObj.hyperLink || nodeObj.image) {
+  //   let infoBox = targetElement.querySelector('.info-box')
+  //   if (infoBox) {
+  //     // 如果 infoBox 存在，则删除它
+  //     infoBox.remove()
+  //   } else {
+  //     // 如果 infoBox 不存在，则创建它
+  //     infoBox = document.createElement('div')
+  //     infoBox.className = 'info-box'
+  //     targetElement.appendChild(infoBox)
 
-      infoBox.innerHTML = '' // 清空信息框的内容
-      if (nodeObj.file) {
-        const fileLink = document.createElement('a')
-        fileLink.href = nodeObj.file.url
-        fileLink.innerText = `File: ${nodeObj.file.name}`
-        fileLink.target = '_blank'
-        infoBox.appendChild(fileLink)
-      }
-      if (nodeObj.image) {
-        const imageLink = document.createElement('a')
-        imageLink.href = nodeObj.image.url
-        // 使用URL对象
-        const urlObject = new URL(nodeObj.image.url);
-        // 使用pathname获取路径部分，然后使用split("/")分割成数组，最后取数组的最后一个元素
-        const fileName = urlObject.pathname.split("/").pop();
-        imageLink.innerText = `Image: ${fileName}`
-        imageLink.target = '_blank'
-        infoBox.appendChild(imageLink)
-      }
+  //     infoBox.innerHTML = '' // 清空信息框的内容
+  //     if (nodeObj.file) {
+  //       const fileLink = document.createElement('a')
+  //       fileLink.href = nodeObj.file.url
+  //       fileLink.innerText = `File: ${nodeObj.file.name}`
+  //       fileLink.target = '_blank'
+  //       infoBox.appendChild(fileLink)
+  //     }
+  //     if (nodeObj.image) {
+  //       const imageLink = document.createElement('a')
+  //       imageLink.href = nodeObj.image.url
+  //       // 使用URL对象
+  //       const urlObject = new URL(nodeObj.image.url);
+  //       // 使用pathname获取路径部分，然后使用split("/")分割成数组，最后取数组的最后一个元素
+  //       const fileName = urlObject.pathname.split("/").pop();
+  //       imageLink.innerText = `Image: ${fileName}`
+  //       imageLink.target = '_blank'
+  //       infoBox.appendChild(imageLink)
+  //     }
 
-      if (nodeObj.hyperLink) {
-        const hyperLink = document.createElement('a')
-        hyperLink.href = nodeObj.hyperLink
-        hyperLink.innerText = '🔗'
-        hyperLink.target = '_blank'
-        infoBox.appendChild(hyperLink)
-      }
-      // 添加删除小图标
-      const deleteIcon = document.createElement('span');
-      deleteIcon.className = 'delete-icon';
-      deleteIcon.innerText = '❌'; // 可以替换为实际的图标或图片
-      infoBox.appendChild(deleteIcon);
-      deleteIcon.style.position = 'absolute';
-      deleteIcon.style.top = '5px';
-      deleteIcon.style.right = '5px';
-      deleteIcon.style.cursor = 'pointer';
-      deleteIcon.addEventListener('click', (event: Event) => {
-        event.stopPropagation();
-        if (nodeObj.file) {
-          delete nodeObj.file;
-          this.reshapeNode(targetElement,nodeObj) //重新渲染下界面
-        } else if (nodeObj.image) {
-          delete nodeObj.image;
-          this.reshapeNode(targetElement,nodeObj) //重新渲染下界面
-        } else if (nodeObj.hyperLink) {
-          delete nodeObj.hyperLink;
-          this.reshapeNode(targetElement,nodeObj) //重新渲染下界面
-        }
-        infoBox!.remove();  //如果存在infoBox，则删除它
-        console.log('Delete icon clicked'); // 确认事件是否触发
-      });
+  //     if (nodeObj.hyperLink) {
+  //       const hyperLink = document.createElement('a')
+  //       hyperLink.href = nodeObj.hyperLink
+  //       hyperLink.innerText = '🔗'
+  //       hyperLink.target = '_blank'
+  //       infoBox.appendChild(hyperLink)
+  //     }
+  //     // 添加删除小图标
+  //     const deleteIcon = document.createElement('span');
+  //     deleteIcon.className = 'delete-icon';
+  //     deleteIcon.innerText = '❌'; // 可以替换为实际的图标或图片
+  //     infoBox.appendChild(deleteIcon);
+  //     deleteIcon.style.position = 'absolute';
+  //     deleteIcon.style.top = '5px';
+  //     deleteIcon.style.right = '5px';
+  //     deleteIcon.style.cursor = 'pointer';
+  //     deleteIcon.addEventListener('click', (event: Event) => {
+  //       event.stopPropagation();
+  //       if (nodeObj.file) {
+  //         delete nodeObj.file;
+  //         this.reshapeNode(targetElement,nodeObj) //重新渲染下界面
+  //       } else if (nodeObj.image) {
+  //         delete nodeObj.image;
+  //         this.reshapeNode(targetElement,nodeObj) //重新渲染下界面
+  //       } else if (nodeObj.hyperLink) {
+  //         delete nodeObj.hyperLink;
+  //         this.reshapeNode(targetElement,nodeObj) //重新渲染下界面
+  //       }
+  //       infoBox!.remove();  //如果存在infoBox，则删除它
+  //       console.log('Delete icon clicked'); // 确认事件是否触发
+  //     });
 
-      // 阻止 infoBox 上除链接外的事件传播
-      infoBox.addEventListener('click', (event: Event) => {
-        if (!(event.target instanceof HTMLAnchorElement)) {
-          // event.stopPropagation()
-        }
-        console.log('infoBox clicked'); // 确认事件是否触发
-      })
+  //     // 阻止 infoBox 上除链接外的事件传播
+  //     infoBox.addEventListener('click', (event: Event) => {
+  //       if (!(event.target instanceof HTMLAnchorElement)) {
+  //         // event.stopPropagation()
+  //       }
+  //       console.log('infoBox clicked'); // 确认事件是否触发
+  //     })
 
-      // 添加双击事件处理
-      infoBox.addEventListener('dblclick', (event: Event) => {
-        event.preventDefault()
-        // 打开编辑对话框或其他编辑方式
-        // this.editNodeAttributes(nodeObj)
-        console.log('infoBox dbclicked'); // 确认事件是否触发
-      })
-    }
-  }
+  //     // 添加双击事件处理
+  //     infoBox.addEventListener('dblclick', (event: Event) => {
+  //       event.preventDefault()
+  //       // 打开编辑对话框或其他编辑方式
+  //       // this.editNodeAttributes(nodeObj)
+  //       console.log('infoBox dbclicked'); // 确认事件是否触发
+  //     })
+  //   }
+  // }
 
   if (nodeObj.aiAnswer) {
     // 如果发现节点是ai的节点，即拥有aiAnswer的属性,那么在节点右侧添加迷你图标

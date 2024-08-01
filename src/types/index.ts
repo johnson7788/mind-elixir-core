@@ -37,6 +37,7 @@ export type apiInterface  = {
   singleNode: boolean
   answerAPI: string 
   uploadAPI: string 
+  headerToken: string 
 }
 
 /**

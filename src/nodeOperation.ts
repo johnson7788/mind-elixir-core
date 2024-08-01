@@ -145,10 +145,15 @@ export const answerChild = async function (this: MindElixirInstance, el?: Topic,
   if (this.apiInterface?.answerAPI) {
     //获取模型返回结果,this.apiInterface.answerAPI 是1个api 的url地址,使用fetch请求获取数据, Post 请求, 请求的参数是nodeEle.nodeObj
     try {
+      let token = '';
+      if (this.apiInterface.headerToken) {
+        token = localStorage.getItem(this.apiInterface.headerToken) || '';
+      }
       const response = await fetch(this.apiInterface.answerAPI, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token,
         },
         body: JSON.stringify({
           node_id: nodeEle.nodeObj.id,
@@ -251,12 +256,20 @@ export const upload = async function (this: MindElixirInstance, el?: Topic, node
     const formData = new FormData();
     formData.append('file', file);
 
+    let token = '';
+    if (this.apiInterface.headerToken) {
+      token = localStorage.getItem(this.apiInterface.headerToken) || '';
+    }
     // 强制将 this.apiInterface.uploadAPI 断言为 string 类型
     const uploadAPI: string = this.apiInterface.uploadAPI;
     try {
       // 上传文件到服务器
       const response = await fetch(uploadAPI, {
         method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          // Include other headers if necessary
+        },
         body: formData,
       });
 
@@ -311,6 +324,52 @@ export const upload = async function (this: MindElixirInstance, el?: Topic, node
   // 触发文件选择对话框
   input.click();
 };
+
+export const deleteFile = async function (this: MindElixirInstance, filename: string) {
+  console.time('deleteFile');
+  
+  if (!this.apiInterface?.uploadAPI) {
+    alert('The uploadAPI is not defined in the apiInterface');
+    return;
+  }
+
+  try {
+    // 强制将 this.apiInterface.uploadAPI 断言为 string 类型
+    const deleteAPI: string = this.apiInterface.uploadAPI;
+
+    // 创建请求体
+    const body = JSON.stringify({ filename });
+
+    // 发送 DELETE 请求
+    const response = await fetch(deleteAPI, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: body
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log('API response:', data);
+
+    if (data.code === 0) {
+      console.log(`File ${filename} deleted successfully.`);
+      // 删除成功后，进行相应处理，比如更新节点数据或UI
+    } else {
+      alert(`Failed to delete file from the API, ${data.msg}`);
+    }
+  } catch (error) {
+    console.error('Error deleting file:', error);
+    alert(`Failed to delete file from the API, ${this.apiInterface.uploadAPI}`);
+  }
+
+  console.timeEnd('deleteFile');
+};
+
 
 export const addChild = function (this: MindElixirInstance, el?: Topic, node?: NodeObj) {
   console.time('addChild')
