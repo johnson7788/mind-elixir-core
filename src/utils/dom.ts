@@ -229,9 +229,9 @@ function uploadImage(mind: MindElixirInstance, node: NodeObj, file: File) {
       console.log('Upload图片结果:', data)
       if (data.code === 0) {
         const imagePath = data.data.filePath; // 假设后台返回的 JSON 中有 imageUrl 字段
-        const url = new URL(mind.apiInterface.uploadAPI);
-        const prefix = `${url.protocol}//${url.host}`;
-        const imageUrl = `${prefix}/${imagePath}`;
+        // const url = new URL(mind.apiInterface.uploadAPI);
+        // const prefix = `${url.protocol}//${url.host}`;
+        const imageUrl = `/${imagePath}`;  // 使用后台返回的图片路径
         InsertNodeImage(mind,node,imageUrl);
       } else {
         console.error('上传图片失败:', data.msg);
