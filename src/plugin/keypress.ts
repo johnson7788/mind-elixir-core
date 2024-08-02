@@ -220,6 +220,7 @@ export default function (mind: MindElixirInstance) {
           } else {
             mind.copyNodes(mind.waitCopy, mind.currentNode)
           }
+          mind.waitCopy = null // 粘贴后清空
         } else {
           // 如果用户不是原始的复制，那么检查剪切板中是否有内容，如果有，那么新建节点
           const clipboardData = await navigator.clipboard.readText() //用户剪切板中的内容
