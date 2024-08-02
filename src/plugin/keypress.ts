@@ -1,4 +1,5 @@
 import type { Topic } from '../types/dom'
+import type { NodeObj } from './index'
 import type { MindElixirInstance } from '../types/index'
 
 const selectRootLeft = (mei: MindElixirInstance) => {
@@ -55,6 +56,31 @@ const handlePrevNext = function (mei: MindElixirInstance, direction: 'previous' 
   }
 }
 
+function data2MarkdownText(nodes:NodeObj[]) {
+  //多个节点导出成markdown格式
+  if (!nodes) {
+    console.error('data2MarkdownText: node is undefined')
+    return ''
+  }
+  //遍历节点
+  let markdown_data = ''
+  nodes.forEach(node => {
+    markdown_data = markdown_data + generateMarkdown(node) + '\n\n'
+  })
+  return markdown_data; // 返回 markdown 数据
+}
+
+function generateMarkdown(node:NodeObj, level = 1) {
+  let md = `${'#'.repeat(level)} ${node.topic}\n\n`;
+
+  if (node.children && node.children.length > 0) {
+      node.children.forEach(child => {
+          md += generateMarkdown(child, level + 1);
+      });
+  }
+  return md;
+}
+
 export default function (mind: MindElixirInstance) {
   const handleRemove = () => {
     if (mind.currentArrow) mind.removeArrow()
@@ -84,18 +110,36 @@ export default function (mind: MindElixirInstance) {
       // d, 下载文件
       mind.downloadImage("png")
     },
-    77: () => {
-      // m, 切换multinode模式
-      //点击时就开始切换状态
-      mind.apiInterface.singleNode = !mind.apiInterface.singleNode; // 切换状态
-      const ele = document.querySelector('#multinode') as HTMLElement | null;
-      if (ele) {
-        const svg = ele.querySelector('use') as SVGUseElement | null; // 选择嵌套的 <use> 元素
-        if (svg) {
-          if (mind.apiInterface.singleNode) {
-            svg.style.fill = ''; // 恢复默认颜色，AI生成单个节点
-          } else {
-            svg.style.fill = 'red'; // 设置为红色, AI生成多个节点
+    77: (e: KeyboardEvent) => {
+      if (e.metaKey || e.ctrlKey) {
+        // ctrl m, 复制markdown格式
+        let markdown = ''
+        if (mind.currentNode) {
+          //选中单个节点的时候
+          markdown = data2MarkdownText([mind.currentNode.nodeObj])
+        }
+        else if (mind.currentNodes){
+          //选中多个节点的时候
+          markdown = data2MarkdownText(mind.currentNodes.map(node => node.nodeObj))
+        }
+        // console.log(markdown) //拷贝内容到剪切板
+        navigator.clipboard.writeText(markdown).then(() => {
+          // Show a notification to the user
+          alert('Text copied to clipboard!');
+        });
+      } else {
+        // m, 切换multinode模式
+        //点击时就开始切换状态
+        mind.apiInterface.singleNode = !mind.apiInterface.singleNode; // 切换状态
+        const ele = document.querySelector('#multinode') as HTMLElement | null;
+        if (ele) {
+          const svg = ele.querySelector('use') as SVGUseElement | null; // 选择嵌套的 <use> 元素
+          if (svg) {
+            if (mind.apiInterface.singleNode) {
+              svg.style.fill = ''; // 恢复默认颜色，AI生成单个节点
+            } else {
+              svg.style.fill = 'red'; // 设置为红色, AI生成多个节点
+            }
           }
         }
       }
