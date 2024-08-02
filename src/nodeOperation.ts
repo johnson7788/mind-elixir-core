@@ -34,7 +34,7 @@ export const reshapeNode = function (this: MindElixirInstance, tpc: Topic, patch
     origin,
   })
 }
-
+//不对外暴露的，不能用
 const addChildFunc = function (mei: MindElixirInstance, tpc: Topic, node?: NodeObj) {
   //支持node是多个节点的嵌套类型
   if (!tpc) return null
@@ -370,7 +370,7 @@ export const deleteFile = async function (this: MindElixirInstance, filename: st
   console.timeEnd('deleteFile');
 };
 
-
+//对外暴露的，对外使用
 export const addChild = function (this: MindElixirInstance, el?: Topic, node?: NodeObj) {
   console.time('addChild')
   const nodeEle = el || this.currentNode

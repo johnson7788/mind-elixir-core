@@ -1,5 +1,5 @@
 import type { Topic } from '../types/dom'
-import type { NodeObj } from './index'
+import type { NodeObj } from '../types/index'
 import type { MindElixirInstance } from '../types/index'
 
 const selectRootLeft = (mei: MindElixirInstance) => {
@@ -203,11 +203,13 @@ export default function (mind: MindElixirInstance) {
     67: (e: KeyboardEvent) => {
       if (e.metaKey || e.ctrlKey) {
         // ctrl c
+        console.log('ctrl c Or Command c pressed')
         if (mind.currentNode) mind.waitCopy = [mind.currentNode]
         else if (mind.currentNodes) mind.waitCopy = mind.currentNodes
       }
     },
     86: (e: KeyboardEvent) => {
+      // ctrl v
       if (!mind.waitCopy || !mind.currentNode) return
       if (e.metaKey || e.ctrlKey) {
         // ctrl v

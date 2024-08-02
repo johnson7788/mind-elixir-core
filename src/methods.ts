@@ -8,7 +8,7 @@ import operationHistory from './plugin/operationHistory'
 import toolBar from './plugin/toolBar'
 import selection from './plugin/selection'
 import { editTopic, createWrapper, createParent, createChildren, createTopic, findEle } from './utils/dom'
-import { getObjById, generateNewObj, fillParent, isMobile } from './utils/index'
+import { getObjById, generateNewObj, fillParent, isMobile,generateUUID } from './utils/index'
 import { layout } from './utils/layout'
 import changeTheme from './utils/theme'
 import * as interact from './interact'
@@ -54,6 +54,7 @@ export type MindElixirMethods = typeof methods
  * @public
  */
 const methods = {
+  generateUUID,
   getObjById,
   generateNewObj,
   layout,
