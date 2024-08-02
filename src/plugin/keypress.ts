@@ -208,15 +208,26 @@ export default function (mind: MindElixirInstance) {
         else if (mind.currentNodes) mind.waitCopy = mind.currentNodes
       }
     },
-    86: (e: KeyboardEvent) => {
-      // ctrl v
-      if (!mind.waitCopy || !mind.currentNode) return
+    86: async (e: KeyboardEvent) => {
+      // ctrl v, 有2部分，一部分是如果用户复制了节点，则粘贴节点，否则粘贴剪切版中的内容，mind.waitCopy代表用户复制了节点
+      // Paste clipboard text as child node
+      if (!mind.currentNode) return //不管哪种情况，用户没有选择任何节点的时候，都不进行任何操作
       if (e.metaKey || e.ctrlKey) {
-        // ctrl v
-        if (mind.waitCopy.length === 1) {
-          mind.copyNode(mind.waitCopy[0], mind.currentNode)
+        if (mind.waitCopy) {
+          // 首先，如果用户复制了节点，则粘贴节点，尊从默认的操作
+          if (mind.waitCopy.length === 1) {
+            mind.copyNode(mind.waitCopy[0], mind.currentNode)
+          } else {
+            mind.copyNodes(mind.waitCopy, mind.currentNode)
+          }
         } else {
-          mind.copyNodes(mind.waitCopy, mind.currentNode)
+          // 如果用户不是原始的复制，那么检查剪切板中是否有内容，如果有，那么新建节点
+          const clipboardData = await navigator.clipboard.readText() //用户剪切板中的内容
+          if (clipboardData) {
+            const newNode = { topic: clipboardData, id: mind.generateUUID() } as NodeObj
+            mind.addChild(mind.currentNode, newNode)
+            mind.bus.fire('operation', { name: 'addChild', obj: newNode })
+          }
         }
       }
     },
