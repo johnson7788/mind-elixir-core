@@ -145,16 +145,15 @@ export const answerChild = async function (this: MindElixirInstance, el?: Topic,
   if (this.apiInterface?.answerAPI) {
     //获取模型返回结果,this.apiInterface.answerAPI 是1个api 的url地址,使用fetch请求获取数据, Post 请求, 请求的参数是nodeEle.nodeObj
     try {
-      let token = '';
-      if (this.apiInterface.headerToken) {
-        token = localStorage.getItem(this.apiInterface.headerToken) || '';
+      let headers: { [key: string]: string } = { 'Content-Type': 'application/json' };
+      if (!this.apiInterface.headerToken) {
+        console.warn('Mind COREL No headerToken found in mind config');
+      } else {
+        headers['Authorization'] = `Bearer ${this.apiInterface.headerToken}`;
       }
       const response = await fetch(this.apiInterface.answerAPI, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token,
-        },
+        headers: headers,
         body: JSON.stringify({
           node_id: nodeEle.nodeObj.id,
           nodes: this.getData(),
@@ -256,9 +255,13 @@ export const upload = async function (this: MindElixirInstance, el?: Topic, node
     const formData = new FormData();
     formData.append('file', file);
 
-    let token = '';
-    if (this.apiInterface.headerToken) {
-      token = localStorage.getItem(this.apiInterface.headerToken) || '';
+    let headers = {}
+    if (!this.apiInterface.headerToken) {
+      console.warn('Mind COREL No headerToken found in mind config');
+    } else {
+      headers = {
+        'Authorization': `Bearer ${this.apiInterface.headerToken}`,
+      }
     }
     // 强制将 this.apiInterface.uploadAPI 断言为 string 类型
     const uploadAPI: string = this.apiInterface.uploadAPI;
@@ -266,10 +269,7 @@ export const upload = async function (this: MindElixirInstance, el?: Topic, node
       // 上传文件到服务器
       const response = await fetch(uploadAPI, {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          // Include other headers if necessary
-        },
+        headers: headers,
         body: formData,
       });
 

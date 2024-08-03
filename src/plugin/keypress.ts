@@ -225,6 +225,8 @@ export default function (mind: MindElixirInstance) {
           // 如果用户不是原始的复制，那么检查剪切板中是否有内容，如果有，那么新建节点
           const clipboardData = await navigator.clipboard.readText() //用户剪切板中的内容
           if (clipboardData) {
+              // 临时保存当前的节点
+            const initialCurrentNode = mind.currentNode;
             //mind.apiInterface.singleNode ,查看是否是单节点模式，还是多节点模式，如果是多节点模式，那么每行都生成1个节点
             if (mind.apiInterface.singleNode) {
               const newNode = { topic: clipboardData, id: mind.generateUUID() } as NodeObj
@@ -237,7 +239,8 @@ export default function (mind: MindElixirInstance) {
               for (let line of lines) {
                 //对line的头尾进行trim操作，去掉空格
                 const newNode = { topic: line.trim(), id: mind.generateUUID() } as NodeObj
-                mind.addChild(mind.currentNode, newNode)
+                //添加完新的节点后mind.currentNode可能会变，我们不要它改变，只使用当前的initialCurrentNode
+                mind.addChild(initialCurrentNode, newNode)
                 mind.bus.fire('operation', { name: 'addChild', obj: newNode })
               }
             }
