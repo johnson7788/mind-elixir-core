@@ -163,7 +163,12 @@ export const answerChild = async function (this: MindElixirInstance, el?: Topic,
         }),
       })
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
+        // 检查是否为401 UNAUTHORIZED错误
+        if (response.status === 401) {
+          alert('Unauthorized access! Please check your login status or token.');
+        } else {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
       }
       const data = await response.json()
       // 根据获取的数据进行相应的处理
@@ -274,7 +279,12 @@ export const upload = async function (this: MindElixirInstance, el?: Topic, node
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        // 检查是否为401 UNAUTHORIZED错误
+        if (response.status === 401) {
+          alert('Unauthorized access! Please check your login status or token.');
+        } else {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
       }
 
       const data = await response.json();
@@ -327,7 +337,7 @@ export const upload = async function (this: MindElixirInstance, el?: Topic, node
 
 export const deleteFile = async function (this: MindElixirInstance, filename: string) {
   console.time('deleteFile');
-  
+
   if (!this.apiInterface?.uploadAPI) {
     alert('The uploadAPI is not defined in the apiInterface');
     return;
@@ -350,7 +360,12 @@ export const deleteFile = async function (this: MindElixirInstance, filename: st
     });
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      // 检查是否为401 UNAUTHORIZED错误
+      if (response.status === 401) {
+        alert('Unauthorized access! Please check your login status or token.');
+      } else {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
     }
 
     const data = await response.json();
