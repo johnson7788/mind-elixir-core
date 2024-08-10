@@ -59,8 +59,9 @@ const options: Options = {
   },
   apiInterface: {
     singleNode: false, //生成单个节点
-    answerAPI: "http://localhost:5556/mind/answer",
-    uploadAPI: "http://localhost:5556/mind/upload_file", //上传文件和图片
+    answerAPI: "http://localhost:5554/mind/answer",
+    uploadAPI: "http://localhost:5554/mind/upload_file", //上传文件和图片
+    listAPI: "http://localhost:5554/mind/get_mind_file_image", //获取文件，mind,文件，图片,列表
     headerToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcyMjY3NjI0NywianRpIjoiNjRiMTI5ZGItYTI2Ny00Njc5LTk2ZDQtNDIyOWU2NjE0MDVjIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6ImpvaG5zb24iLCJuYmYiOjE3MjI2NzYyNDcsImNzcmYiOiIyZjc0Njc4Ni04YWE3LTRjY2EtOTgzMi1iZTcxOWFlMTYwOGMiLCJleHAiOjE3MjMyODEwNDd9.FwOx566ogh-IRRNuilZdHbj1LwHeGuhccP32F4bI5Rw", //上传文件和图片时，请求头中的token字段
   }
 }
