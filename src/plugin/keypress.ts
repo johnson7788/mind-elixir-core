@@ -277,6 +277,10 @@ export default function (mind: MindElixirInstance) {
     if (e.metaKey && e.altKey && e.keyCode === 73) {
       return; // 允许默认行为
     }
+    // 排除查找快捷键 Command + F, 或者Ctrl + F
+    if ((e.metaKey || e.ctrlKey) && e.keyCode === 70) {
+      return; // 允许默认行为
+    }
     e.preventDefault()
     if (!mind.editable) return
     // console.log(e, e.target)
