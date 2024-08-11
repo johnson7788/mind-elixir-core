@@ -64,6 +64,18 @@ export const shapeTpc = function (tpc: Topic, nodeObj: NodeObj) {
     tpc.linkContainer = undefined
   }
 
+  if (nodeObj.mind) {
+    const mindContainer = $d.createElement('a')
+    mindContainer.className = 'hyper-link'
+    mindContainer.target = '_blank'
+    mindContainer.innerText = '𝕞'
+    mindContainer.href = nodeObj.mind.url
+    tpc.appendChild(mindContainer)
+    tpc.mindContainer = mindContainer
+  } else if (tpc.mindContainer) {
+    tpc.mindContainer = undefined
+  }
+
   if (nodeObj.file) {
     const fileContainer = $d.createElement('a')
     fileContainer.className = 'file-link'

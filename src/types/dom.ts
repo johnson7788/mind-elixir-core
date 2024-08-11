@@ -39,6 +39,7 @@ export interface Topic extends HTMLElement {
 
   linkContainer?: HTMLElement
   fileContainer?: HTMLElement
+  mindContainer?: HTMLElement
   image?: HTMLImageElement
   icons?: HTMLSpanElement
   tags?: HTMLDivElement

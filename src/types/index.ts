@@ -177,6 +177,12 @@ export type NodeObj = {
     url: string
     name: string
   }
+  //用户关联的其它思维导图
+  mind?: {
+    url: string
+    name: string
+    id: string
+  }
   // main node specific properties
   branchColor?: string
   // add programatically

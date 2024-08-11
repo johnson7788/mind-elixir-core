@@ -115,7 +115,16 @@ const aboutMindElixir: MindElixirData = {
             id: 'bd1bb4b14d6697c2',
             file: {
               name: 'news.txt',
-              url: 'http://localhost:5556/file/news.txt'
+              url: 'http://localhost:5554/file/news.txt'
+            }
+          },
+          {
+            topic: '我的思维导图',
+            id: 'bd1bb4b34xq697c2',
+            mind: {
+              name: 'AIMind文档',
+              id: "44fe562a6e7072980cc0c9c0",
+              url: 'http://127.0.0.1:5554/mindjson/public/AIMind%E6%96%87%E6%A1%A3.json'
             }
           },
         ],
