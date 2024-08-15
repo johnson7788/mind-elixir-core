@@ -124,7 +124,7 @@ const aboutMindElixir: MindElixirData = {
             mind: {
               name: 'AIMind文档',
               id: "44fe562a6e7072980cc0c9c0",
-              url: 'http://127.0.0.1:5554/mindjson/public/AIMind%E6%96%87%E6%A1%A3.json'
+              url: '/mind/share/public/AIMind文档.json'
             }
           },
         ],
